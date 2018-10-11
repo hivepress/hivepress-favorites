@@ -1,8 +1,7 @@
 <?php
 /**
  * Plugin Name: HivePress Favorites
- * Plugin URI: https://hivepress.co/
- * Description: Listing favorites for HivePress plugin.
+ * Description: Favorite listings add-on for HivePress plugin.
  * Version: 1.0.0
  * Author: HivePress
  * Author URI: https://hivepress.co/
