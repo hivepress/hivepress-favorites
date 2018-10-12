@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Favorites\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-07 20:10+0000\n"
+"POT-Creation-Date: 2018-10-12 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,17 +14,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/"
 
-#: includes/settings.php:28 templates/listing/content/actions/favorite.php:7
-#: templates/listing/single/actions/favorite.php:7
+#: includes/settings.php:19
+msgid "My Favorites"
+msgstr ""
+
+#: includes/settings.php:45 templates/favorite/parts/favorite-button.php:7
+#: templates/favorite/parts/favorite-link.php:7
 msgid "Add to Favorites"
 msgstr ""
 
-#: includes/settings.php:31
+#: includes/settings.php:48
 msgid "Remove from Favorites"
-msgstr ""
-
-#: includes/settings.php:40
-msgid "My Favorites"
 msgstr ""
 
 #. Name of the plugin
@@ -32,14 +32,14 @@ msgid "HivePress Favorites"
 msgstr ""
 
 #. Description of the plugin
-msgid "Listing favorites for HivePress plugin."
+msgid "Favorite listings add-on for HivePress plugin."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
 msgstr ""
 
 #. URI of the plugin
 #. Author URI of the plugin
 msgid "https://hivepress.co/"
-msgstr ""
-
-#. Author of the plugin
-msgid "HivePress"
 msgstr ""

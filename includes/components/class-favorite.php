@@ -32,27 +32,25 @@ class Favorite extends \HivePress\Component {
 		if ( ! is_admin() ) {
 
 			// Set template context.
-			add_filter( 'hivepress/template/template_context/favorite_list', [ $this, 'set_template_context' ] );
+			add_filter( 'hivepress/template/template_context/listing_favorites', [ $this, 'set_template_context' ] );
 		}
 	}
 
 	/**
 	 * Gets favorites.
 	 *
-	 * @param int $post_id
+	 * @param array $args
 	 * @return array
 	 */
-	private function get( $post_id = 0 ) {
-		$args = [
-			'type'      => 'hp_favorite',
-			'post_type' => 'hp_listing',
-			'user_id'   => get_current_user_id(),
-			'fields'    => 'ids',
-		];
-
-		if ( 0 !== $post_id ) {
-			$args['post_id'] = $post_id;
-		}
+	private function get( $args = [] ) {
+		$args = array_merge(
+			[
+				'type'      => 'hp_favorite',
+				'post_type' => 'hp_listing',
+				'fields'    => 'ids',
+			],
+			$args
+		);
 
 		return get_comments( $args );
 	}
@@ -76,7 +74,12 @@ class Favorite extends \HivePress\Component {
 		if ( 0 !== $post_id ) {
 
 			// Get favorite IDs.
-			$favorite_ids = $this->get( $post_id );
+			$favorite_ids = $this->get(
+				[
+					'user_id' => get_current_user_id(),
+					'post_id' => $post_id,
+				]
+			);
 
 			// Add or delete favorite.
 			if ( ! empty( $favorite_ids ) ) {
@@ -103,7 +106,7 @@ class Favorite extends \HivePress\Component {
 	public function delete( $user_id ) {
 
 		// Get favorite IDs.
-		$favorite_ids = $this->get();
+		$favorite_ids = $this->get( [ 'user_id' => $user_id ] );
 
 		// Delete favorites.
 		foreach ( $favorite_ids as $favorite_id ) {
@@ -120,7 +123,12 @@ class Favorite extends \HivePress\Component {
 	public function set_form_args( $args ) {
 
 		// Get favorite IDs.
-		$favorite_ids = $this->get( get_the_ID() );
+		$favorite_ids = $this->get(
+			[
+				'user_id' => get_current_user_id(),
+				'post_id' => get_the_ID(),
+			]
+		);
 
 		if ( ! empty( $favorite_ids ) ) {
 
