@@ -8,7 +8,7 @@
  * Text Domain: hivepress-favorites
  * Domain Path: /languages/
  *
- * @package HivePress/Favorites
+ * @package HivePress\Favorites
  */
 
 // Exit if accessed directly.

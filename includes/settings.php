@@ -2,13 +2,30 @@
 /**
  * Contains plugin settings.
  *
- * @package HivePress/Favorites
+ * @package HivePress\Favorites
  */
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 $settings = [
+
+	// Listing component.
+	'listing'  => [
+
+		// Pages.
+		'pages' => [
+			'favorites' => [
+				'title'      => esc_html__( 'My Favorites', 'hivepress-favorites' ),
+				'regex'      => '^account/favorites/?$',
+				'redirect'   => 'index.php?hp-listing-favorites=1',
+				'capability' => 'read',
+				'template'   => 'listing_favorites',
+				'menu'       => 'user_account',
+				'order'      => 20,
+			],
+		],
+	],
 
 	// Favorite component.
 	'favorite' => [
@@ -34,22 +51,9 @@ $settings = [
 			],
 		],
 
-		// Pages.
-		'pages'     => [
-			'list' => [
-				'title'      => esc_html__( 'My Favorites', 'hivepress-favorites' ),
-				'regex'      => '^account/favorites/?$',
-				'redirect'   => 'index.php?hp-favorite-list=1',
-				'capability' => 'read',
-				'template'   => 'favorite_list',
-				'menu'       => 'user_account',
-				'order'      => 20,
-			],
-		],
-
 		// Templates.
 		'templates' => [
-			'favorite_list'   => [
+			'listing_favorites' => [
 				'parent' => 'user_account',
 
 				'areas'  => [
@@ -62,22 +66,22 @@ $settings = [
 				],
 			],
 
-			'archive_listing' => [
+			'archive_listing'   => [
 				'areas' => [
 					'actions' => [
 						'favorite' => [
-							'path'  => 'listing/content/actions/favorite',
+							'path'  => 'favorite/parts/favorite-link',
 							'order' => 20,
 						],
 					],
 				],
 			],
 
-			'single_listing'  => [
+			'single_listing'    => [
 				'areas' => [
 					'actions' => [
 						'favorite' => [
-							'path'  => 'listing/single/actions/favorite',
+							'path'  => 'favorite/parts/favorite-button',
 							'order' => 20,
 						],
 					],
