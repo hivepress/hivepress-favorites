@@ -10,7 +10,8 @@ DB_USER=$2
 DB_PASS=$3
 DB_HOST=${4-localhost}
 WP_VERSION=${5-latest}
-SKIP_DB_CREATE=${6-false}
+HP_VERSION=${6-latest}
+SKIP_DB_CREATE=${7-false}
 
 TMPDIR=${TMPDIR-/tmp}
 TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
@@ -121,6 +122,15 @@ install_test_suite() {
 
 }
 
+install_hp() {
+		cd $TRAVIS_BUILD_DIR
+		cd ..
+		git clone https://github.com/hivepress/hivepress.git
+		cd hivepress
+		git checkout $HP_VERSION
+		cd -
+}
+
 install_db() {
 
 	if [ ${SKIP_DB_CREATE} = "true" ]; then
@@ -149,4 +159,7 @@ install_db() {
 
 install_wp
 install_test_suite
+if [ "$TRAVIS" == true ]; then
+	install_hp
+fi
 install_db
