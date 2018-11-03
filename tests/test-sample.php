@@ -15,6 +15,6 @@ class SampleTest extends WP_UnitTestCase {
 	 */
 	public function test_sample() {
 		// Replace this with some actual testing code.
-		$this->assertTrue( hp_get_array_value([1], 0) === 0 );
+		$this->assertTrue( hp_prefix('test')==='hp_test' );
 	}
 }
