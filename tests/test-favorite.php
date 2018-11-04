@@ -45,6 +45,7 @@ class Favorite_Test extends \WP_UnitTestCase {
 		$this->update_args = [ 'post_id' => $this->post_id ];
 
 		$this->get_args = [
+			'type'    => 'hp_favorite',
 			'user_id' => get_current_user_id(),
 			'post_id' => $this->post_id,
 		];
@@ -58,12 +59,12 @@ class Favorite_Test extends \WP_UnitTestCase {
 		// Test if favorite is added.
 		hivepress()->favorite->update( $this->update_args );
 
-		$this->assertCount( 1, hivepress()->favorite->get( $this->get_args ) );
+		$this->assertCount( 1, get_comments( $this->get_args ) );
 
 		// Test if favorite is removed.
 		hivepress()->favorite->update( $this->update_args );
 
-		$this->assertCount( 0, hivepress()->favorite->get( $this->get_args ) );
+		$this->assertCount( 0, get_comments( $this->get_args ) );
 
 		// Test invalid post types.
 		wp_update_post(
@@ -75,7 +76,7 @@ class Favorite_Test extends \WP_UnitTestCase {
 
 		hivepress()->favorite->update( $this->update_args );
 
-		$this->assertCount( 0, hivepress()->favorite->get( $this->get_args ) );
+		$this->assertCount( 0, get_comments( $this->get_args ) );
 
 		// Test invalid post status.
 		wp_update_post(
@@ -88,7 +89,7 @@ class Favorite_Test extends \WP_UnitTestCase {
 
 		hivepress()->favorite->update( $this->update_args );
 
-		$this->assertCount( 0, hivepress()->favorite->get( $this->get_args ) );
+		$this->assertCount( 0, get_comments( $this->get_args ) );
 	}
 
 	/**
@@ -99,12 +100,12 @@ class Favorite_Test extends \WP_UnitTestCase {
 		// Test if favorite is added.
 		hivepress()->favorite->update( $this->update_args );
 
-		$this->assertCount( 1, hivepress()->favorite->get( $this->get_args ) );
+		$this->assertCount( 1, get_comments( $this->get_args ) );
 
 		// Delete user.
 		wp_delete_user( get_current_user_id() );
 
 		// Test if favorite is removed.
-		$this->assertCount( 0, hivepress()->favorite->get() );
+		$this->assertCount( 0, get_comments( $this->get_args ) );
 	}
 }

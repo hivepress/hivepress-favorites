@@ -42,7 +42,7 @@ class Favorite extends \HivePress\Component {
 	 * @param array $args
 	 * @return array
 	 */
-	public function get( $args = [] ) {
+	private function get( $args = [] ) {
 		$args = array_merge(
 			[
 				'type'      => 'hp_favorite',
