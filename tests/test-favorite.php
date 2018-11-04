@@ -127,7 +127,7 @@ class Favorite_Test extends \WP_UnitTestCase {
 		);
 
 		// Delete user.
-		//wp_delete_user( get_current_user_id() );
+		wp_delete_user( get_current_user_id() );
 
 		// Test if favorite is removed.
 		$this->assertCount( 0, hivepress()->favorite->get() );
