@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Favorites\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-12 10:36+0000\n"
+"POT-Creation-Date: 2019-01-21 18:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -18,13 +18,17 @@ msgstr ""
 msgid "My Favorites"
 msgstr ""
 
-#: includes/settings.php:45 templates/favorite/parts/favorite-button.php:7
-#: templates/favorite/parts/favorite-link.php:7
+#: includes/settings.php:45 templates/listing/parts/favorite-button.php:7
+#: templates/listing/parts/favorite-link.php:7
 msgid "Add to Favorites"
 msgstr ""
 
 #: includes/settings.php:48
 msgid "Remove from Favorites"
+msgstr ""
+
+#: templates/listing/parts/loop-favorite.php:16
+msgid "No favorites yet."
 msgstr ""
 
 #. Name of the plugin
