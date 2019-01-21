@@ -59,7 +59,7 @@ $settings = [
 				'areas'  => [
 					'content' => [
 						'loop' => [
-							'path'  => 'listing/parts/loop-archive',
+							'path'  => 'listing/parts/loop-favorite',
 							'order' => 20,
 						],
 					],
@@ -70,7 +70,7 @@ $settings = [
 				'areas' => [
 					'actions' => [
 						'favorite' => [
-							'path'  => 'favorite/parts/favorite-link',
+							'path'  => 'listing/parts/favorite-link',
 							'order' => 20,
 						],
 					],
@@ -81,7 +81,7 @@ $settings = [
 				'areas' => [
 					'actions' => [
 						'favorite' => [
-							'path'  => 'favorite/parts/favorite-button',
+							'path'  => 'listing/parts/favorite-button',
 							'order' => 20,
 						],
 					],

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Favorites
  * Description: Favorite listings add-on for HivePress plugin.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: HivePress
  * Author URI: https://hivepress.co/
  * Text Domain: hivepress-favorites
