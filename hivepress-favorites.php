@@ -1,23 +1,23 @@
 <?php
 /**
  * Plugin Name: HivePress Favorites
- * Description: Favorite listings add-on for HivePress plugin.
- * Version: 1.0.1
+ * Description: Favorite listings extension for HivePress plugin.
+ * Version: 1.1.0
  * Author: HivePress
- * Author URI: https://hivepress.co/
+ * Author URI: https://hivepress.io/
  * Text Domain: hivepress-favorites
  * Domain Path: /languages/
  *
- * @package HivePress\Favorites
+ * @package HivePress_Favorites
  */
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-// Register plugin path.
+// Register plugin directory.
 add_filter(
-	'hivepress/core/plugin_paths',
-	function( $paths ) {
-		return array_merge( $paths, [ dirname( __FILE__ ) ] );
+	'hivepress/v1/dirs',
+	function( $dirs ) {
+		return array_merge( $dirs, [ __DIR__ ] );
 	}
 );
