@@ -60,7 +60,7 @@ final class Favorite {
 		) !== 0 ) {
 			$menu['items']['favorite_listings'] = [
 				'route' => 'favorite/view_listings',
-				'order' => 15,
+				'order' => 20,
 			];
 		}
 
