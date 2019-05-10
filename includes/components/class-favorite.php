@@ -26,8 +26,48 @@ final class Favorite {
 	 */
 	public function __construct() {
 
+		// Add routes.
+		add_filter( 'hivepress/v1/controllers/listing', [ $this, 'add_routes' ] );
+
+		// Add menu items.
+		add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
+
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
+	}
+
+	/**
+	 * Adds routes.
+	 *
+	 * @param array $controller Controller arguments.
+	 * @return array
+	 */
+	public function add_routes( $controller ) {
+		$controller['routes']['favorite_listings'] = [
+			'title'    => esc_html__( 'My Favorites', 'hivepress-favorites' ),
+			'path'     => '/account/favorites',
+			'redirect' => [ $this, 'redirect_favorites_page' ],
+			'action'   => [ $this, 'render_favorites_page' ],
+		];
+
+		return $controller;
+	}
+
+	/**
+	 * Adds menu items.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function add_menu_items( $menu ) {
+		if ( is_user_logged_in() ) {
+			$menu['items']['favorite_listings'] = [
+				'route' => 'listing/favorite_listings',
+				'order' => 15,
+			];
+		}
+
+		return $menu;
 	}
 
 	/**
