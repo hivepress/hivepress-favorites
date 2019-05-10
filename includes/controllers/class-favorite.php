@@ -47,15 +47,24 @@ class Favorite extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					'path'      => '/listings',
-					'rest'      => true,
+					[
+						'path'      => '/listings',
+						'rest'      => true,
 
-					'endpoints' => [
-						[
-							'path'    => '/(?P<id>\d+)/favorite',
-							'methods' => 'POST',
-							'action'  => 'favorite_listing',
+						'endpoints' => [
+							[
+								'path'    => '/(?P<id>\d+)/favorite',
+								'methods' => 'POST',
+								'action'  => 'favorite_listing',
+							],
 						],
+					],
+
+					'view_listings' => [
+						'title'    => esc_html__( 'My Favorites', 'hivepress-favorites' ),
+						'path'     => '/account/favorites',
+						'redirect' => 'redirect_listings_page',
+						'action'   => 'render_listings_page',
 					],
 				],
 			],
@@ -126,5 +135,74 @@ class Favorite extends Controller {
 			],
 			200
 		);
+	}
+
+	/**
+	 * Redirects listings page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_listings_page() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return add_query_arg( 'redirect', rawurlencode( hp\get_current_url() ), User::get_url( 'login_user' ) );
+		}
+
+		// Check listings.
+		if ( hp\get_post_id(
+			[
+				'post_type'   => 'hp_listing',
+				'post_status' => 'publish',
+				'post__in'    => array_merge(
+					[ 0 ],
+					wp_list_pluck(
+						get_comments(
+							[
+								'type'    => 'hp_listing_favorite',
+								'user_id' => get_current_user_id(),
+							]
+						),
+						'comment_post_ID'
+					)
+				),
+			]
+		) === 0 ) {
+			return true;
+		}
+	}
+
+	/**
+	 * Renders listings page.
+	 *
+	 * @return string
+	 */
+	public function render_listings_page() {
+
+		// Query listings.
+		query_posts(
+			[
+				'post_type'      => 'hp_listing',
+				'post_status'    => 'publish',
+				'post__in'       => wp_list_pluck(
+					get_comments(
+						[
+							'type'    => 'hp_listing_favorite',
+							'user_id' => get_current_user_id(),
+						]
+					),
+					'comment_post_ID'
+				),
+				'orderby'        => 'post__in',
+				'posts_per_page' => -1,
+			]
+		);
+
+		// Render page.
+		$output  = ( new Blocks\Element( [ 'file_path' => 'header' ] ) )->render();
+		$output .= ( new Blocks\Template( [ 'template_name' => 'listings_favorite_page' ] ) )->render();
+		$output .= ( new Blocks\Element( [ 'file_path' => 'footer' ] ) )->render();
+
+		return $output;
 	}
 }

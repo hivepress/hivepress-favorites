@@ -26,31 +26,11 @@ final class Favorite {
 	 */
 	public function __construct() {
 
-		// Add routes.
-		add_filter( 'hivepress/v1/controllers/listing', [ $this, 'add_routes' ] );
-
 		// Add menu items.
 		add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
 
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
-	}
-
-	/**
-	 * Adds routes.
-	 *
-	 * @param array $controller Controller arguments.
-	 * @return array
-	 */
-	public function add_routes( $controller ) {
-		$controller['routes']['favorite_listings'] = [
-			'title'    => esc_html__( 'My Favorites', 'hivepress-favorites' ),
-			'path'     => '/account/favorites',
-			'redirect' => [ $this, 'redirect_favorites_page' ],
-			'action'   => [ $this, 'render_favorites_page' ],
-		];
-
-		return $controller;
 	}
 
 	/**
@@ -60,9 +40,26 @@ final class Favorite {
 	 * @return array
 	 */
 	public function add_menu_items( $menu ) {
-		if ( is_user_logged_in() ) {
+		if ( hp\get_post_id(
+			[
+				'post_type'   => 'hp_listing',
+				'post_status' => 'publish',
+				'post__in'    => array_merge(
+					[ 0 ],
+					wp_list_pluck(
+						get_comments(
+							[
+								'type'    => 'hp_listing_favorite',
+								'user_id' => get_current_user_id(),
+							]
+						),
+						'comment_post_ID'
+					)
+				),
+			]
+		) !== 0 ) {
 			$menu['items']['favorite_listings'] = [
-				'route' => 'listing/favorite_listings',
+				'route' => 'favorite/view_listings',
 				'order' => 15,
 			];
 		}

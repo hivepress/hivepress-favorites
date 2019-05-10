@@ -61,8 +61,8 @@ class Listing_Favorite extends Comment {
 				],
 
 				'aliases' => [
-					'user_id' => 'user_id',
-					'post_id' => 'listing_id',
+					'user_id'         => 'user_id',
+					'comment_post_ID' => 'listing_id',
 				],
 			],
 			$args
