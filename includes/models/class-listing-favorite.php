@@ -52,11 +52,13 @@ class Listing_Favorite extends Comment {
 					'user_id'    => [
 						'type'      => 'number',
 						'min_value' => 0,
+						'required'  => true,
 					],
 
 					'listing_id' => [
 						'type'      => 'number',
 						'min_value' => 0,
+						'required'  => true,
 					],
 				],
 
