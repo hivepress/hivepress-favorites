@@ -1,0 +1,44 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: HivePress Favorites\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-18 21:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.2.2; wp-5.2"
+
+#: includes/blocks/class-listing-favorite.php:39
+msgid "Add to Favorites"
+msgstr ""
+
+#. Description of the plugin
+msgid "Favorite listings extension for HivePress plugin."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
+msgstr ""
+
+#. Name of the plugin
+msgid "HivePress Favorites"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://hivepress.io/"
+msgstr ""
+
+#: includes/controllers/class-favorite.php:64
+msgid "My Favorites"
+msgstr ""
+
+#: includes/blocks/class-listing-favorite.php:37
+msgid "Remove from Favorites"
+msgstr ""
