@@ -9,7 +9,6 @@ namespace HivePress\Components;
 
 use HivePress\Helpers as hp;
 use HivePress\Models;
-use HivePress\Emails;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -46,15 +45,7 @@ final class Favorite {
 				'post_status' => 'publish',
 				'post__in'    => array_merge(
 					[ 0 ],
-					wp_list_pluck(
-						get_comments(
-							[
-								'type'    => 'hp_listing_favorite',
-								'user_id' => get_current_user_id(),
-							]
-						),
-						'comment_post_ID'
-					)
+					$this->get_listing_ids( get_current_user_id() )
 				),
 			]
 		) !== 0 ) {
@@ -87,5 +78,25 @@ final class Favorite {
 		foreach ( $favorite_ids as $favorite_id ) {
 			wp_delete_comment( $favorite_id, true );
 		}
+	}
+
+	/**
+	 * Gets listing IDs.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function get_listing_ids( $user_id ) {
+		return array_map(
+			'absint',
+			wp_list_pluck(
+				get_comments(
+					[
+						'type'    => 'hp_listing_favorite',
+						'user_id' => $user_id,
+					]
+				),
+				'comment_post_ID'
+			)
+		);
 	}
 }

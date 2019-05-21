@@ -21,9 +21,12 @@ return [
 								'actions_primary' => [
 									'blocks' => [
 										'favorite_toggle' => [
-											'type'  => 'listing_favorite_toggle',
-											'class' => [ 'hp-listing__action' ],
-											'order' => 20,
+											'type'       => 'listing_favorite_toggle',
+											'order'      => 20,
+
+											'attributes' => [
+												'class' => [ 'hp-listing__action' ],
+											],
 										],
 									],
 								],

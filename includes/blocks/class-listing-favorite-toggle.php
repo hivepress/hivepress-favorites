@@ -40,4 +40,17 @@ class Listing_Favorite_Toggle extends Toggle {
 
 		parent::__construct( $args );
 	}
+
+	/**
+	 * Bootstraps block properties.
+	 */
+	protected function bootstrap() {
+
+		// Set active property.
+		if ( is_user_logged_in() && in_array( get_the_ID(), hivepress()->favorite->get_listing_ids( get_current_user_id() ), true ) ) {
+			$this->active = true;
+		}
+
+		parent::bootstrap();
+	}
 }

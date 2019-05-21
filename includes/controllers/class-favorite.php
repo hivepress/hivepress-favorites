@@ -9,10 +9,7 @@ namespace HivePress\Controllers;
 
 use HivePress\Helpers as hp;
 use HivePress\Models;
-use HivePress\Forms;
-use HivePress\Menus;
 use HivePress\Blocks;
-use HivePress\Emails;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -156,15 +153,7 @@ class Favorite extends Controller {
 				'post_status' => 'publish',
 				'post__in'    => array_merge(
 					[ 0 ],
-					wp_list_pluck(
-						get_comments(
-							[
-								'type'    => 'hp_listing_favorite',
-								'user_id' => get_current_user_id(),
-							]
-						),
-						'comment_post_ID'
-					)
+					hivepress()->favorite->get_listing_ids( get_current_user_id() )
 				),
 			]
 		) === 0 ) {
@@ -184,15 +173,7 @@ class Favorite extends Controller {
 			[
 				'post_type'      => 'hp_listing',
 				'post_status'    => 'publish',
-				'post__in'       => wp_list_pluck(
-					get_comments(
-						[
-							'type'    => 'hp_listing_favorite',
-							'user_id' => get_current_user_id(),
-						]
-					),
-					'comment_post_ID'
-				),
+				'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
 				'orderby'        => 'post__in',
 				'posts_per_page' => -1,
 			]
