@@ -25,37 +25,14 @@ final class Favorite {
 	 */
 	public function __construct() {
 
-		// Add menu items.
-		add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
-
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
-	}
 
-	/**
-	 * Adds menu items.
-	 *
-	 * @param array $menu Menu arguments.
-	 * @return array
-	 */
-	public function add_menu_items( $menu ) {
-		if ( hp\get_post_id(
-			[
-				'post_type'   => 'hp_listing',
-				'post_status' => 'publish',
-				'post__in'    => array_merge(
-					[ 0 ],
-					$this->get_listing_ids( get_current_user_id() )
-				),
-			]
-		) !== 0 ) {
-			$menu['items']['favorite_listings'] = [
-				'route' => 'favorite/view_listings',
-				'order' => 20,
-			];
+		if ( ! is_admin() ) {
+
+			// Add menu items.
+			add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
 		}
-
-		return $menu;
 	}
 
 	/**
@@ -98,5 +75,31 @@ final class Favorite {
 				'comment_post_ID'
 			)
 		);
+	}
+
+	/**
+	 * Adds menu items.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function add_menu_items( $menu ) {
+		if ( hp\get_post_id(
+			[
+				'post_type'   => 'hp_listing',
+				'post_status' => 'publish',
+				'post__in'    => array_merge(
+					[ 0 ],
+					$this->get_listing_ids( get_current_user_id() )
+				),
+			]
+		) !== 0 ) {
+			$menu['items']['favorite_listings'] = [
+				'route' => 'favorite/view_listings',
+				'order' => 20,
+			];
+		}
+
+		return $menu;
 	}
 }
