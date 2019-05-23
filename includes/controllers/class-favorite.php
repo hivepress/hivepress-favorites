@@ -167,21 +167,23 @@ class Favorite extends Controller {
 	 * @return string
 	 */
 	public function render_listings_page() {
+		$output = ( new Blocks\Element( [ 'file_path' => 'header' ] ) )->render();
 
-		// Query listings.
-		query_posts(
+		$output .= ( new Blocks\Template(
 			[
-				'post_type'      => 'hp_listing',
-				'post_status'    => 'publish',
-				'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
-				'orderby'        => 'post__in',
-				'posts_per_page' => -1,
+				'template_name' => 'listings_favorite_page',
+				'listing_query' => new \WP_Query(
+					[
+						'post_type'      => 'hp_listing',
+						'post_status'    => 'publish',
+						'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
+						'orderby'        => 'post__in',
+						'posts_per_page' => -1,
+					]
+				),
 			]
-		);
+		) )->render();
 
-		// Render page.
-		$output  = ( new Blocks\Element( [ 'file_path' => 'header' ] ) )->render();
-		$output .= ( new Blocks\Template( [ 'template_name' => 'listings_favorite_page' ] ) )->render();
 		$output .= ( new Blocks\Element( [ 'file_path' => 'footer' ] ) )->render();
 
 		return $output;
