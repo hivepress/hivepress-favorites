@@ -167,9 +167,7 @@ class Favorite extends Controller {
 	 * @return string
 	 */
 	public function render_listings_page() {
-		$output = ( new Blocks\Element( [ 'file_path' => 'header' ] ) )->render();
-
-		$output .= ( new Blocks\Template(
+		return ( new Blocks\Template(
 			[
 				'template_name' => 'listings_favorite_page',
 				'listing_query' => new \WP_Query(
@@ -183,9 +181,5 @@ class Favorite extends Controller {
 				),
 			]
 		) )->render();
-
-		$output .= ( new Blocks\Element( [ 'file_path' => 'footer' ] ) )->render();
-
-		return $output;
 	}
 }
