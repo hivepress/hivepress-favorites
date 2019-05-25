@@ -167,19 +167,18 @@ class Favorite extends Controller {
 	 * @return string
 	 */
 	public function render_listings_page() {
-		return ( new Blocks\Template(
+
+		// Query listings.
+		query_posts(
 			[
-				'template_name' => 'listings_favorite_page',
-				'listing_query' => new \WP_Query(
-					[
-						'post_type'      => 'hp_listing',
-						'post_status'    => 'publish',
-						'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
-						'orderby'        => 'post__in',
-						'posts_per_page' => -1,
-					]
-				),
+				'post_type'      => 'hp_listing',
+				'post_status'    => 'publish',
+				'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
+				'orderby'        => 'post__in',
+				'posts_per_page' => -1,
 			]
-		) )->render();
+		);
+
+		return ( new Blocks\Template( [ 'template_name' => 'listings_favorite_page' ] ) )->render();
 	}
 }
