@@ -12,13 +12,13 @@ defined( 'ABSPATH' ) || exit;
 
 return [
 	'blocks' => [
-		'container' => [
+		'listing_container' => [
 			'blocks' => [
-				'footer' => [
+				'listing_footer' => [
 					'blocks' => [
-						'actions_primary' => [
+						'listing_actions_primary' => [
 							'blocks' => [
-								'favorite_toggle' => [
+								'listing_favorite_toggle' => [
 									'type'       => 'listing_favorite_toggle',
 									'view'       => 'icon',
 									'order'      => 20,

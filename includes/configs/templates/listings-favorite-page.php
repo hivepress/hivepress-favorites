@@ -14,7 +14,7 @@ return [
 	'parent' => 'account_page',
 
 	'blocks' => [
-		'content' => [
+		'page_content' => [
 			'blocks' => [
 				'listings' => [
 					'type'    => 'listings',

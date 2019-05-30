@@ -12,15 +12,15 @@ defined( 'ABSPATH' ) || exit;
 
 return [
 	'blocks' => [
-		'page_content' => [
+		'page_container' => [
 			'blocks' => [
-				'columns' => [
+				'page_columns' => [
 					'blocks' => [
-						'sidebar' => [
+						'page_sidebar' => [
 							'blocks' => [
-								'actions_primary' => [
+								'listing_actions_primary' => [
 									'blocks' => [
-										'favorite_toggle' => [
+										'listing_favorite_toggle' => [
 											'type'       => 'listing_favorite_toggle',
 											'order'      => 20,
 
