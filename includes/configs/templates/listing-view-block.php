@@ -20,7 +20,7 @@ return [
 							'blocks' => [
 								'favorite_toggle' => [
 									'type'       => 'listing_favorite_toggle',
-									'small'      => true,
+									'view'       => 'icon',
 									'order'      => 20,
 
 									'attributes' => [

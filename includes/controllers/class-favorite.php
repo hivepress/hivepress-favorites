@@ -179,6 +179,6 @@ class Favorite extends Controller {
 			]
 		);
 
-		return ( new Blocks\Template( [ 'template_name' => 'listings_favorite_page' ] ) )->render();
+		return ( new Blocks\Template( [ 'template' => 'listings_favorite_page' ] ) )->render();
 	}
 }
