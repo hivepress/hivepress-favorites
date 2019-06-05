@@ -25,14 +25,86 @@ final class Favorite {
 	 */
 	public function __construct() {
 
+		// Hide favorites.
+		add_filter( 'comments_clauses', [ $this, 'hide_favorites' ] );
+
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
+
+		// todo
+		add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'todo1' ] );
+		add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'todo2' ] );
 
 		if ( ! is_admin() ) {
 
 			// Add menu items.
 			add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
 		}
+	}
+
+	// todo
+	public function todo1( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_favorite_toggle' => [
+								'type'       => 'listing_favorite_toggle',
+								'view'       => 'icon',
+								'order'      => 20,
+
+								'attributes' => [
+									'class' => [ 'hp-listing__action' ],
+								],
+							],
+						],
+					],
+				],
+			],
+			'blocks'
+		);
+	}
+
+	// todo
+	public function todo2( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_favorite_toggle' => [
+								'type'       => 'listing_favorite_toggle',
+								'order'      => 20,
+
+								'attributes' => [
+									'class' => [ 'hp-listing__action' ],
+								],
+							],
+						],
+					],
+				],
+			],
+			'blocks'
+		);
+	}
+
+	/**
+	 * Hides favorites.
+	 *
+	 * @param array $query Query arguments.
+	 * @return array
+	 */
+	public function hide_favorites( $query ) {
+		global $pagenow;
+
+		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
+			$query['where'] .= ' AND comment_type NOT LIKE "hp_favorite"';
+		}
+
+		return $query;
 	}
 
 	/**
