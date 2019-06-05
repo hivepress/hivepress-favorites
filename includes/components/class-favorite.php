@@ -31,64 +31,15 @@ final class Favorite {
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
 
-		// todo
-		add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'todo1' ] );
-		add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'todo2' ] );
-
 		if ( ! is_admin() ) {
+
+			// Alter templates.
+			add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'alter_listing_view_block' ] );
+			add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'alter_listing_view_page' ] );
 
 			// Add menu items.
 			add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
 		}
-	}
-
-	// todo
-	public function todo1( $template ) {
-		return hp\merge_trees(
-			$template,
-			[
-				'blocks' => [
-					'listing_actions_primary' => [
-						'blocks' => [
-							'listing_favorite_toggle' => [
-								'type'       => 'listing_favorite_toggle',
-								'view'       => 'icon',
-								'order'      => 20,
-
-								'attributes' => [
-									'class' => [ 'hp-listing__action' ],
-								],
-							],
-						],
-					],
-				],
-			],
-			'blocks'
-		);
-	}
-
-	// todo
-	public function todo2( $template ) {
-		return hp\merge_trees(
-			$template,
-			[
-				'blocks' => [
-					'listing_actions_primary' => [
-						'blocks' => [
-							'listing_favorite_toggle' => [
-								'type'       => 'listing_favorite_toggle',
-								'order'      => 20,
-
-								'attributes' => [
-									'class' => [ 'hp-listing__action' ],
-								],
-							],
-						],
-					],
-				],
-			],
-			'blocks'
-		);
 	}
 
 	/**
@@ -101,7 +52,7 @@ final class Favorite {
 		global $pagenow;
 
 		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
-			$query['where'] .= ' AND comment_type NOT LIKE "hp_favorite"';
+			$query['where'] .= ' AND comment_type != "hp_favorite"';
 		}
 
 		return $query;
@@ -117,7 +68,7 @@ final class Favorite {
 		// Get favorite IDs.
 		$favorite_ids = get_comments(
 			[
-				'type'    => 'hp_listing_favorite',
+				'type'    => 'hp_favorite',
 				'user_id' => $user_id,
 				'fields'  => 'ids',
 			]
@@ -130,22 +81,61 @@ final class Favorite {
 	}
 
 	/**
-	 * Gets listing IDs.
+	 * Alters listing view block.
 	 *
-	 * @param int $user_id User ID.
+	 * @param array $template Template arguments.
+	 * @return array
 	 */
-	public function get_listing_ids( $user_id ) {
-		return array_map(
-			'absint',
-			wp_list_pluck(
-				get_comments(
-					[
-						'type'    => 'hp_listing_favorite',
-						'user_id' => $user_id,
-					]
-				),
-				'comment_post_ID'
-			)
+	public function alter_listing_view_block( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_favorite_toggle' => [
+								'type'       => 'favorite_toggle',
+								'view'       => 'icon',
+								'order'      => 20,
+
+								'attributes' => [
+									'class' => [ 'hp-listing__action' ],
+								],
+							],
+						],
+					],
+				],
+			],
+			'blocks'
+		);
+	}
+
+	/**
+	 * Alters listing view page.
+	 *
+	 * @param array $template Template arguments.
+	 * @return array
+	 */
+	public function alter_listing_view_page( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_favorite_toggle' => [
+								'type'       => 'favorite_toggle',
+								'order'      => 20,
+
+								'attributes' => [
+									'class' => [ 'hp-listing__action' ],
+								],
+							],
+						],
+					],
+				],
+			],
+			'blocks'
 		);
 	}
 
@@ -173,5 +163,25 @@ final class Favorite {
 		}
 
 		return $menu;
+	}
+
+	/**
+	 * Gets listing IDs.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function get_listing_ids( $user_id ) {
+		return array_map(
+			'absint',
+			wp_list_pluck(
+				get_comments(
+					[
+						'type'    => 'hp_favorite',
+						'user_id' => $user_id,
+					]
+				),
+				'comment_post_ID'
+			)
+		);
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing favorite toggle block.
+ * Favorite toggle block.
  *
  * @package HivePress\Blocks
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing favorite toggle block class.
+ * Favorite toggle block class.
  *
- * @class Listing_Favorite_Toggle
+ * @class Favorite_Toggle
  */
-class Listing_Favorite_Toggle extends Toggle {
+class Favorite_Toggle extends Toggle {
 
 	/**
 	 * Block type.
