@@ -94,7 +94,7 @@ class Favorite extends Controller {
 		// Get favorite IDs.
 		$favorite_ids = get_comments(
 			[
-				'type'    => 'hp_listing_favorite',
+				'type'    => 'hp_favorite',
 				'user_id' => get_current_user_id(),
 				'post_id' => $listing->get_id(),
 				'fields'  => 'ids',
@@ -110,7 +110,7 @@ class Favorite extends Controller {
 		} else {
 
 			// Add favorite.
-			$favorite = new Models\Listing_Favorite();
+			$favorite = new Models\Favorite();
 
 			$favorite->fill(
 				[

@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing favorite model.
+ * Favorite model.
  *
  * @package HivePress\Models
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing favorite model class.
+ * Favorite model class.
  *
- * @class Listing_Favorite
+ * @class Favorite
  */
-class Listing_Favorite extends Comment {
+class Favorite extends Comment {
 
 	/**
 	 * Model name.
