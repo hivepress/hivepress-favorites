@@ -100,7 +100,7 @@ final class Favorite {
 								'order'      => 20,
 
 								'attributes' => [
-									'class' => [ 'hp-listing__action' ],
+									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
 								],
 							],
 						],
@@ -129,7 +129,7 @@ final class Favorite {
 								'order'      => 20,
 
 								'attributes' => [
-									'class' => [ 'hp-listing__action' ],
+									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
 								],
 							],
 						],
