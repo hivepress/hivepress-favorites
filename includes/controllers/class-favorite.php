@@ -58,7 +58,7 @@ class Favorite extends Controller {
 					],
 
 					'view_listings' => [
-						'title'    => esc_html__( 'My Favorites', 'hivepress-favorites' ),
+						'title'    => esc_html__( 'Favorites', 'hivepress-favorites' ),
 						'path'     => '/account/favorites',
 						'redirect' => 'redirect_listings_page',
 						'action'   => 'render_listings_page',
