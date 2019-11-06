@@ -28,11 +28,7 @@ final class Favorite {
 		// Delete favorites.
 		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
 
-		if ( is_admin() ) {
-
-			// Hide favorites.
-			add_filter( 'comments_clauses', [ $this, 'hide_favorites' ] );
-		} else {
+		if ( ! is_admin() ) {
 
 			// Alter templates.
 			add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'alter_listing_view_block' ] );
@@ -63,22 +59,6 @@ final class Favorite {
 		foreach ( $favorite_ids as $favorite_id ) {
 			wp_delete_comment( $favorite_id, true );
 		}
-	}
-
-	/**
-	 * Hides favorites.
-	 *
-	 * @param array $query Query arguments.
-	 * @return array
-	 */
-	public function hide_favorites( $query ) {
-		global $pagenow;
-
-		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
-			$query['where'] .= ' AND comment_type != "hp_favorite"';
-		}
-
-		return $query;
 	}
 
 	/**
