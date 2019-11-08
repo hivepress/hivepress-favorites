@@ -8,7 +8,7 @@ Stable tag: 1.1.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Favorite listings extension for HivePress plugin.
+Allow users to keep a list of favorite listings.
 
 == Description ==
 

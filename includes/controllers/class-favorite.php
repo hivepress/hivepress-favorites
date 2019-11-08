@@ -151,10 +151,7 @@ class Favorite extends Controller {
 			[
 				'post_type'   => 'hp_listing',
 				'post_status' => 'publish',
-				'post__in'    => array_merge(
-					[ 0 ],
-					hivepress()->favorite->get_listing_ids( get_current_user_id() )
-				),
+				'post__in'    => array_merge( [ 0 ], hivepress()->favorite->get_listing_ids( get_current_user_id() ) ),
 			]
 		) === 0 ) {
 			return true;
@@ -173,7 +170,7 @@ class Favorite extends Controller {
 			[
 				'post_type'      => 'hp_listing',
 				'post_status'    => 'publish',
-				'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
+				'post__in'       => array_merge( [ 0 ], hivepress()->favorite->get_listing_ids( get_current_user_id() ) ),
 				'orderby'        => 'post__in',
 				'posts_per_page' => -1,
 			]

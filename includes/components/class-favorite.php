@@ -152,17 +152,25 @@ final class Favorite {
 	 * @param int $user_id User ID.
 	 */
 	public function get_listing_ids( $user_id ) {
-		return array_map(
-			'absint',
-			wp_list_pluck(
-				get_comments(
-					[
-						'type'    => 'hp_favorite',
-						'user_id' => $user_id,
-					]
-				),
-				'comment_post_ID'
-			)
-		);
+
+		// Set query arguments.
+		$query_args = [
+			'type'    => 'hp_favorite',
+			'user_id' => $user_id,
+		];
+
+		// Get cached IDs.
+		$listing_ids = hivepress()->cache->get_user_cache( $user_id, array_merge( $query_args, [ 'fields' => 'post_ids' ] ), 'comment/favorite' );
+
+		if ( is_null( $listing_ids ) ) {
+			$listing_ids = array_map( 'absint', wp_list_pluck( get_comments( $query_args ), 'comment_post_ID' ) );
+
+			// Cache IDs.
+			if ( count( $listing_ids ) <= 1000 ) {
+				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'fields' => 'post_ids' ] ), $listing_ids, 'comment/favorite', DAY_IN_SECONDS );
+			}
+		}
+
+		return (array) $listing_ids;
 	}
 }
