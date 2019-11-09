@@ -167,7 +167,7 @@ final class Favorite {
 
 			// Cache IDs.
 			if ( count( $listing_ids ) <= 1000 ) {
-				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'fields' => 'post_ids' ] ), $listing_ids, 'comment/favorite', DAY_IN_SECONDS );
+				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'fields' => 'post_ids' ] ), 'comment/favorite', $listing_ids, DAY_IN_SECONDS );
 			}
 		}
 
