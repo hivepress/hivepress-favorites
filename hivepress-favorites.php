@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: HivePress Favorites
- * Description: Favorite listings extension for HivePress plugin.
- * Version: 1.1.2
+ * Description: Allow users to keep a list of favorite listings.
+ * Version: 1.1.3
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-favorites
