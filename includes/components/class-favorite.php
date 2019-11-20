@@ -106,7 +106,7 @@ final class Favorite {
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
-								'order'      => 20,
+								'order'      => 10,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
