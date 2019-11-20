@@ -51,13 +51,13 @@ class Favorite extends Comment {
 				'fields'  => [
 					'user_id'    => [
 						'type'      => 'number',
-						'min_value' => 0,
+						'min_value' => 1,
 						'required'  => true,
 					],
 
 					'listing_id' => [
 						'type'      => 'number',
-						'min_value' => 0,
+						'min_value' => 1,
 						'required'  => true,
 					],
 				],
