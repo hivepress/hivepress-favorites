@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: HivePress Favorites\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-21 12:39+0000\n"
-"PO-Revision-Date: 2019-11-21 12:40+0000\n"
+"PO-Revision-Date: 2019-11-21 18:15+0000\n"
 "Last-Translator: admin <admin@admin.com>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
@@ -17,11 +17,11 @@ msgstr ""
 
 #: includes/blocks/class-favorite-toggle.php:41
 msgid "Add to Favorites"
-msgstr "Добавить в Избранное"
+msgstr "Добавить в избранное"
 
 #: includes/blocks/class-favorite-toggle.php:42
 msgid "Remove from Favorites"
-msgstr "Удалить из Избранного"
+msgstr "Удалить из избранного"
 
 #: includes/controllers/class-favorite.php:61
 msgid "Favorites"
@@ -29,11 +29,11 @@ msgstr "Избранное"
 
 #. Name of the plugin
 msgid "HivePress Favorites"
-msgstr ""
+msgstr "HivePress Избранное"
 
 #. Description of the plugin
 msgid "Allow users to keep a list of favorite listings."
-msgstr ""
+msgstr "Дайте пользователям возможность вести список избранных позиций."
 
 #. Author of the plugin
 msgid "HivePress"
