@@ -26,7 +26,7 @@ final class Favorite {
 	public function __construct() {
 
 		// Delete favorites.
-		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
+		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_favorites' ] );
 
 		if ( ! is_admin() ) {
 
