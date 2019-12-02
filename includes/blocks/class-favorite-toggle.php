@@ -20,13 +20,6 @@ defined( 'ABSPATH' ) || exit;
 class Favorite_Toggle extends Toggle {
 
 	/**
-	 * Block type.
-	 *
-	 * @var string
-	 */
-	protected static $type;
-
-	/**
 	 * Class constructor.
 	 *
 	 * @param array $args Block arguments.

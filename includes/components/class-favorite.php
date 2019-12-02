@@ -47,13 +47,11 @@ final class Favorite {
 	public function delete_favorites( $user_id ) {
 
 		// Get favorite IDs.
-		$favorite_ids = get_comments(
+		$favorite_ids = Models\Favorite::filter(
 			[
-				'type'    => 'hp_favorite',
 				'user_id' => $user_id,
-				'fields'  => 'ids',
 			]
-		);
+		)->get_ids();
 
 		// Delete favorites.
 		foreach ( $favorite_ids as $favorite_id ) {

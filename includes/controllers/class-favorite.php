@@ -22,13 +22,6 @@ defined( 'ABSPATH' ) || exit;
 class Favorite extends Controller {
 
 	/**
-	 * Controller name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
 	 * Controller routes.
 	 *
 	 * @var array
@@ -85,21 +78,19 @@ class Favorite extends Controller {
 		}
 
 		// Get listing.
-		$listing = Models\Listing::get( $request->get_param( 'id' ) );
+		$listing = Models\Listing::get_by_id( $request->get_param( 'id' ) );
 
 		if ( is_null( $listing ) || $listing->get_status() !== 'publish' ) {
 			return hp\rest_error( 404 );
 		}
 
 		// Get favorite IDs.
-		$favorite_ids = get_comments(
+		$favorite_ids = Models\Favorite::filter(
 			[
-				'type'    => 'hp_favorite',
-				'user_id' => get_current_user_id(),
-				'post_id' => $listing->get_id(),
-				'fields'  => 'ids',
+				'user_id'    => get_current_user_id(),
+				'listing_id' => $listing->get_id(),
 			]
-		);
+		)->get_ids();
 
 		if ( ! empty( $favorite_ids ) ) {
 
