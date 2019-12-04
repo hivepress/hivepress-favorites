@@ -45,18 +45,11 @@ final class Favorite {
 	 * @param int $user_id User ID.
 	 */
 	public function delete_favorites( $user_id ) {
-
-		// Get favorite IDs.
-		$favorite_ids = Models\Favorite::filter(
+		Models\Favorite::filter(
 			[
 				'user_id' => $user_id,
 			]
-		)->get_ids();
-
-		// Delete favorites.
-		foreach ( $favorite_ids as $favorite_id ) {
-			wp_delete_comment( $favorite_id, true );
-		}
+		)->delete();
 	}
 
 	/**
@@ -158,14 +151,14 @@ final class Favorite {
 		];
 
 		// Get cached IDs.
-		$listing_ids = hivepress()->cache->get_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'comment/favorite' );
+		$listing_ids = hivepress()->cache->get_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'favorite' );
 
 		if ( is_null( $listing_ids ) ) {
 			$listing_ids = array_map( 'absint', wp_list_pluck( get_comments( $query_args ), 'comment_post_ID' ) );
 
 			// Cache IDs.
 			if ( count( $listing_ids ) <= 1000 ) {
-				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'comment/favorite', $listing_ids, DAY_IN_SECONDS );
+				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'favorite', $listing_ids, DAY_IN_SECONDS );
 			}
 		}
 
