@@ -22,30 +22,23 @@ defined( 'ABSPATH' ) || exit;
 class Favorite extends Controller {
 
 	/**
-	 * Controller routes.
-	 *
-	 * @var array
-	 */
-	protected static $routes = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Controller arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
 					[
-						'path'      => '/listings',
-						'rest'      => true,
+						'path'   => '/listings',
+						'rest'   => true,
 
-						'endpoints' => [
+						'routes' => [
 							[
-								'path'    => '/(?P<id>\d+)/favorite',
-								'methods' => 'POST',
-								'action'  => 'favorite_listing',
+								'path'   => '/(?P<id>\d+)/favorite',
+								'method' => 'POST',
+								'action' => [ $this, 'favorite_listing' ],
 							],
 						],
 					],
@@ -53,15 +46,15 @@ class Favorite extends Controller {
 					'view_listings' => [
 						'title'    => esc_html__( 'Favorites', 'hivepress-favorites' ),
 						'path'     => '/account/favorites',
-						'redirect' => 'redirect_listings_page',
-						'action'   => 'render_listings_page',
+						'redirect' => [ $this, 'redirect_listings_page' ],
+						'action'   => [ $this, 'render_listings_page' ],
 					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 
 	/**

@@ -40,7 +40,7 @@ class Listings_Favorite_Page extends Account_Page {
 							'listings' => [
 								'type'    => 'listings',
 								'columns' => 2,
-								'order'   => 10,
+								'_order'  => 10,
 							],
 						],
 					],

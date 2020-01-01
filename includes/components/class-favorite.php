@@ -35,7 +35,7 @@ final class Favorite {
 			add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'alter_listing_view_page' ] );
 
 			// Add menu items.
-			add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
+			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'add_menu_items' ] );
 		}
 	}
 
@@ -68,7 +68,7 @@ final class Favorite {
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
 								'view'       => 'icon',
-								'order'      => 20,
+								'_order'     => 20,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
@@ -97,7 +97,7 @@ final class Favorite {
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
-								'order'      => 10,
+								'_order'     => 10,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
@@ -129,8 +129,8 @@ final class Favorite {
 			]
 		) !== 0 ) {
 			$menu['items']['favorite_listings'] = [
-				'route' => 'favorite/view_listings',
-				'order' => 20,
+				'route'  => 'favorite/view_listings',
+				'_order' => 20,
 			];
 		}
 
