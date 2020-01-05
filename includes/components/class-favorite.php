@@ -45,7 +45,7 @@ final class Favorite {
 	 * @param int $user_id User ID.
 	 */
 	public function delete_favorites( $user_id ) {
-		Models\Favorite::filter(
+		Models\Favorite::query()->filter(
 			[
 				'user_id' => $user_id,
 			]
@@ -77,8 +77,7 @@ final class Favorite {
 						],
 					],
 				],
-			],
-			'blocks'
+			]
 		);
 	}
 
@@ -106,8 +105,7 @@ final class Favorite {
 						],
 					],
 				],
-			],
-			'blocks'
+			]
 		);
 	}
 

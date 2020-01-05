@@ -71,14 +71,14 @@ class Favorite extends Controller {
 		}
 
 		// Get listing.
-		$listing = Models\Listing::get_by_id( $request->get_param( 'id' ) );
+		$listing = Models\Listing::query()->get_by_id( $request->get_param( 'id' ) );
 
 		if ( is_null( $listing ) || $listing->get_status() !== 'publish' ) {
 			return hp\rest_error( 404 );
 		}
 
 		// Get favorite IDs.
-		$favorite_ids = Models\Favorite::filter(
+		$favorite_ids = Models\Favorite::query()->filter(
 			[
 				'user_id'    => get_current_user_id(),
 				'listing_id' => $listing->get_id(),
