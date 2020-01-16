@@ -18,25 +18,32 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Favorite
  */
-final class Favorite {
+final class Favorite extends Component {
 
 	/**
 	 * Class constructor.
+	 *
+	 * @param array $args Component arguments.
 	 */
-	public function __construct() {
+	public function __construct( $args = [] ) {
 
 		// Delete favorites.
 		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_favorites' ] );
 
 		if ( ! is_admin() ) {
 
+			// Set favorites.
+			add_action( 'init', [ $this, 'set_favorites' ], 10000 );
+
+			// Alter account menu.
+			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
+
 			// Alter templates.
 			add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'alter_listing_view_block' ] );
 			add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'alter_listing_view_page' ] );
-
-			// Add menu items.
-			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'add_menu_items' ] );
 		}
+
+		parent::__construct( $args );
 	}
 
 	/**
@@ -47,9 +54,71 @@ final class Favorite {
 	public function delete_favorites( $user_id ) {
 		Models\Favorite::query()->filter(
 			[
-				'user_id' => $user_id,
+				'user' => $user_id,
 			]
 		)->delete();
+	}
+
+	/**
+	 * Sets favorites.
+	 */
+	public function set_favorites() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		// Set query.
+		$query = Models\Favorite::query()->filter(
+			[
+				'user' => get_current_user_id(),
+			]
+		);
+
+		// Get cached IDs.
+		$favorite_ids = hivepress()->cache->get_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'favorite' );
+
+		if ( is_null( $favorite_ids ) ) {
+
+			// Get favorite IDs.
+			$favorite_ids = array_map(
+				function( $favorite ) {
+					return $favorite->get_listing__id();
+				},
+				$query->get()->serialize()
+			);
+
+			// Cache IDs.
+			if ( count( $favorite_ids ) <= 1000 ) {
+				hivepress()->cache->set_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'favorite', $favorite_ids );
+			}
+		}
+
+		// Set request context.
+		hivepress()->request->set_context( 'favorite_ids', $favorite_ids );
+	}
+
+	/**
+	 * Alters account menu.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function alter_account_menu( $menu ) {
+		if ( Models\Listing::query()->filter(
+			[
+				'status' => 'publish',
+				'id__in' => hivepress()->request->get_context( 'favorite_ids', [] ),
+			]
+		)->get_first_id() ) {
+			$menu['items']['listings_favorite'] = [
+				'route'  => 'listings_favorite_page',
+				'_order' => 20,
+			];
+		}
+
+		return $menu;
 	}
 
 	/**
@@ -107,59 +176,5 @@ final class Favorite {
 				],
 			]
 		);
-	}
-
-	/**
-	 * Adds menu items.
-	 *
-	 * @param array $menu Menu arguments.
-	 * @return array
-	 */
-	public function add_menu_items( $menu ) {
-		if ( hp\get_post_id(
-			[
-				'post_type'   => 'hp_listing',
-				'post_status' => 'publish',
-				'post__in'    => array_merge(
-					[ 0 ],
-					$this->get_listing_ids( get_current_user_id() )
-				),
-			]
-		) !== 0 ) {
-			$menu['items']['favorite_listings'] = [
-				'route'  => 'favorite/view_listings',
-				'_order' => 20,
-			];
-		}
-
-		return $menu;
-	}
-
-	/**
-	 * Gets listing IDs.
-	 *
-	 * @param int $user_id User ID.
-	 */
-	public function get_listing_ids( $user_id ) {
-
-		// Set query arguments.
-		$query_args = [
-			'type'    => 'hp_favorite',
-			'user_id' => $user_id,
-		];
-
-		// Get cached IDs.
-		$listing_ids = hivepress()->cache->get_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'favorite' );
-
-		if ( is_null( $listing_ids ) ) {
-			$listing_ids = array_map( 'absint', wp_list_pluck( get_comments( $query_args ), 'comment_post_ID' ) );
-
-			// Cache IDs.
-			if ( count( $listing_ids ) <= 1000 ) {
-				hivepress()->cache->set_user_cache( $user_id, array_merge( $query_args, [ 'listing_ids' ] ), 'favorite', $listing_ids, DAY_IN_SECONDS );
-			}
-		}
-
-		return (array) $listing_ids;
 	}
 }
