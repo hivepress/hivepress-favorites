@@ -96,7 +96,7 @@ final class Favorite extends Controller {
 			);
 
 			if ( ! $favorite->save() ) {
-				return hp\rest_error( 400 );
+				return hp\rest_error( 400, $favorite->_get_errors() );
 			}
 		}
 

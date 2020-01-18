@@ -165,7 +165,7 @@ final class Favorite extends Component {
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
-								'_order'     => 10,
+								'_order'     => 20,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
