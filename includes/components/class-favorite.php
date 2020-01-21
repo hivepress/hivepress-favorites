@@ -77,7 +77,7 @@ final class Favorite extends Component {
 		);
 
 		// Get cached IDs.
-		$favorite_ids = hivepress()->cache->get_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'favorite' );
+		$favorite_ids = hivepress()->cache->get_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'models/favorite' );
 
 		if ( is_null( $favorite_ids ) ) {
 
@@ -91,7 +91,7 @@ final class Favorite extends Component {
 
 			// Cache IDs.
 			if ( count( $favorite_ids ) <= 1000 ) {
-				hivepress()->cache->set_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'favorite', $favorite_ids );
+				hivepress()->cache->set_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'models/favorite', $favorite_ids );
 			}
 		}
 
