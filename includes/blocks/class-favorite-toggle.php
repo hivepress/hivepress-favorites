@@ -54,7 +54,7 @@ class Favorite_Toggle extends Toggle {
 			$this->url = hivepress()->router->get_url(
 				'listing_favorite_action',
 				[
-					'listing' => $listing->get_id(),
+					'listing_id' => $listing->get_id(),
 				]
 			);
 

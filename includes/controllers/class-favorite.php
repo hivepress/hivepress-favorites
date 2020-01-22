@@ -67,7 +67,7 @@ final class Favorite extends Controller {
 		}
 
 		// Get listing.
-		$listing = Models\Listing::query()->get_by_id( $request->get_param( 'listing' ) );
+		$listing = Models\Listing::query()->get_by_id( $request->get_param( 'listing_id' ) );
 
 		if ( empty( $listing ) || $listing->get_status() !== 'publish' ) {
 			return hp\rest_error( 404 );
