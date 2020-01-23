@@ -33,7 +33,7 @@ final class Favorite extends Component {
 		if ( ! is_admin() ) {
 
 			// Set favorites.
-			add_action( 'init', [ $this, 'set_favorites' ], 10000 );
+			add_action( 'init', [ $this, 'set_favorites' ], 100 );
 
 			// Alter account menu.
 			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
