@@ -20,56 +20,40 @@ defined( 'ABSPATH' ) || exit;
 class Favorite extends Comment {
 
 	/**
-	 * Model name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
-	 * Model fields.
-	 *
-	 * @var array
-	 */
-	protected static $fields = [];
-
-	/**
-	 * Model aliases.
-	 *
-	 * @var array
-	 */
-	protected static $aliases = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Model arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
-				'fields'  => [
-					'user_id'    => [
-						'type'      => 'number',
-						'min_value' => 0,
-						'required'  => true,
+				'fields' => [
+					'added_date' => [
+						'type'   => 'date',
+						'format' => 'Y-m-d H:i:s',
+						'_alias' => 'comment_date',
 					],
 
-					'listing_id' => [
+					'user'       => [
 						'type'      => 'number',
-						'min_value' => 0,
+						'min_value' => 1,
 						'required'  => true,
+						'_alias'    => 'user_id',
+						'_model'    => 'user',
 					],
-				],
 
-				'aliases' => [
-					'user_id'         => 'user_id',
-					'comment_post_ID' => 'listing_id',
+					'listing'    => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'required'  => true,
+						'_alias'    => 'comment_post_ID',
+						'_model'    => 'listing',
+					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 }

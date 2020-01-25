@@ -18,29 +18,32 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Favorite
  */
-final class Favorite {
+final class Favorite extends Component {
 
 	/**
 	 * Class constructor.
+	 *
+	 * @param array $args Component arguments.
 	 */
-	public function __construct() {
+	public function __construct( $args = [] ) {
 
 		// Delete favorites.
-		add_action( 'delete_user', [ $this, 'delete_favorites' ] );
+		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_favorites' ] );
 
-		if ( is_admin() ) {
+		if ( ! is_admin() ) {
 
-			// Hide favorites.
-			add_filter( 'comments_clauses', [ $this, 'hide_favorites' ] );
-		} else {
+			// Set favorites.
+			add_action( 'init', [ $this, 'set_favorites' ], 100 );
+
+			// Alter account menu.
+			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
 
 			// Alter templates.
 			add_filter( 'hivepress/v1/templates/listing_view_block', [ $this, 'alter_listing_view_block' ] );
 			add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'alter_listing_view_page' ] );
-
-			// Add menu items.
-			add_filter( 'hivepress/v1/menus/account', [ $this, 'add_menu_items' ] );
 		}
+
+		parent::__construct( $args );
 	}
 
 	/**
@@ -49,36 +52,73 @@ final class Favorite {
 	 * @param int $user_id User ID.
 	 */
 	public function delete_favorites( $user_id ) {
-
-		// Get favorite IDs.
-		$favorite_ids = get_comments(
+		Models\Favorite::query()->filter(
 			[
-				'type'    => 'hp_favorite',
-				'user_id' => $user_id,
-				'fields'  => 'ids',
+				'user' => $user_id,
 			]
-		);
-
-		// Delete favorites.
-		foreach ( $favorite_ids as $favorite_id ) {
-			wp_delete_comment( $favorite_id, true );
-		}
+		)->delete();
 	}
 
 	/**
-	 * Hides favorites.
-	 *
-	 * @param array $query Query arguments.
-	 * @return array
+	 * Sets favorites.
 	 */
-	public function hide_favorites( $query ) {
-		global $pagenow;
+	public function set_favorites() {
 
-		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
-			$query['where'] .= ' AND comment_type != "hp_favorite"';
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return;
 		}
 
-		return $query;
+		// Set query.
+		$query = Models\Favorite::query()->filter(
+			[
+				'user' => get_current_user_id(),
+			]
+		)->order( [ 'added_date' => 'desc' ] );
+
+		// Get cached IDs.
+		$favorite_ids = hivepress()->cache->get_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'models/favorite' );
+
+		if ( is_null( $favorite_ids ) ) {
+
+			// Get favorite IDs.
+			$favorite_ids = array_map(
+				function( $favorite ) {
+					return $favorite->get_listing__id();
+				},
+				$query->get()->serialize()
+			);
+
+			// Cache IDs.
+			if ( count( $favorite_ids ) <= 1000 ) {
+				hivepress()->cache->set_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'models/favorite', $favorite_ids );
+			}
+		}
+
+		// Set request context.
+		hivepress()->request->set_context( 'favorite_ids', $favorite_ids );
+	}
+
+	/**
+	 * Alters account menu.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function alter_account_menu( $menu ) {
+		if ( Models\Listing::query()->filter(
+			[
+				'status' => 'publish',
+				'id__in' => hivepress()->request->get_context( 'favorite_ids', [] ),
+			]
+		)->get_first_id() ) {
+			$menu['items']['listings_favorite'] = [
+				'route'  => 'listings_favorite_page',
+				'_order' => 20,
+			];
+		}
+
+		return $menu;
 	}
 
 	/**
@@ -97,7 +137,7 @@ final class Favorite {
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
 								'view'       => 'icon',
-								'order'      => 20,
+								'_order'     => 20,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
@@ -106,8 +146,7 @@ final class Favorite {
 						],
 					],
 				],
-			],
-			'blocks'
+			]
 		);
 	}
 
@@ -126,7 +165,7 @@ final class Favorite {
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
-								'order'      => 20,
+								'_order'     => 20,
 
 								'attributes' => [
 									'class' => [ 'hp-listing__action', 'hp-listing__action--favorite' ],
@@ -135,54 +174,7 @@ final class Favorite {
 						],
 					],
 				],
-			],
-			'blocks'
-		);
-	}
-
-	/**
-	 * Adds menu items.
-	 *
-	 * @param array $menu Menu arguments.
-	 * @return array
-	 */
-	public function add_menu_items( $menu ) {
-		if ( hp\get_post_id(
-			[
-				'post_type'   => 'hp_listing',
-				'post_status' => 'publish',
-				'post__in'    => array_merge(
-					[ 0 ],
-					$this->get_listing_ids( get_current_user_id() )
-				),
 			]
-		) !== 0 ) {
-			$menu['items']['favorite_listings'] = [
-				'route' => 'favorite/view_listings',
-				'order' => 20,
-			];
-		}
-
-		return $menu;
-	}
-
-	/**
-	 * Gets listing IDs.
-	 *
-	 * @param int $user_id User ID.
-	 */
-	public function get_listing_ids( $user_id ) {
-		return array_map(
-			'absint',
-			wp_list_pluck(
-				get_comments(
-					[
-						'type'    => 'hp_favorite',
-						'user_id' => $user_id,
-					]
-				),
-				'comment_post_ID'
-			)
 		);
 	}
 }

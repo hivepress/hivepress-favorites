@@ -19,56 +19,38 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Favorite
  */
-class Favorite extends Controller {
+final class Favorite extends Controller {
 
 	/**
-	 * Controller name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
-	 * Controller routes.
-	 *
-	 * @var array
-	 */
-	protected static $routes = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Controller arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					[
-						'path'      => '/listings',
-						'rest'      => true,
-
-						'endpoints' => [
-							[
-								'path'    => '/(?P<id>\d+)/favorite',
-								'methods' => 'POST',
-								'action'  => 'favorite_listing',
-							],
-						],
+					'listing_favorite_action' => [
+						'base'   => 'listing_resource',
+						'path'   => '/favorite',
+						'method' => 'POST',
+						'action' => [ $this, 'favorite_listing' ],
+						'rest'   => true,
 					],
 
-					'view_listings' => [
-						'title'    => esc_html__( 'My Favorites', 'hivepress-favorites' ),
-						'path'     => '/account/favorites',
-						'redirect' => 'redirect_listings_page',
-						'action'   => 'render_listings_page',
+					'listings_favorite_page'  => [
+						'title'    => esc_html__( 'Favorites', 'hivepress-favorites' ),
+						'base'     => 'user_account_page',
+						'path'     => '/favorites',
+						'redirect' => [ $this, 'redirect_listings_favorite_page' ],
+						'action'   => [ $this, 'render_listings_favorite_page' ],
 					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 
 	/**
@@ -85,100 +67,104 @@ class Favorite extends Controller {
 		}
 
 		// Get listing.
-		$listing = Models\Listing::get( $request->get_param( 'id' ) );
+		$listing = Models\Listing::query()->get_by_id( $request->get_param( 'listing_id' ) );
 
-		if ( is_null( $listing ) || $listing->get_status() !== 'publish' ) {
+		if ( empty( $listing ) || $listing->get_status() !== 'publish' ) {
 			return hp\rest_error( 404 );
 		}
 
-		// Get favorite IDs.
-		$favorite_ids = get_comments(
+		// Get favorites.
+		$favorites = Models\Favorite::query()->filter(
 			[
-				'type'    => 'hp_favorite',
-				'user_id' => get_current_user_id(),
-				'post_id' => $listing->get_id(),
-				'fields'  => 'ids',
+				'user'    => get_current_user_id(),
+				'listing' => $listing->get_id(),
 			]
-		);
+		)->get();
 
-		if ( ! empty( $favorite_ids ) ) {
+		if ( $favorites->count() ) {
 
 			// Delete favorites.
-			foreach ( $favorite_ids as $favorite_id ) {
-				wp_delete_comment( $favorite_id, true );
-			}
+			$favorites->delete();
 		} else {
 
 			// Add favorite.
-			$favorite = new Models\Favorite();
-
-			$favorite->fill(
+			$favorite = ( new Models\Favorite() )->fill(
 				[
-					'user_id'    => get_current_user_id(),
-					'listing_id' => $listing->get_id(),
+					'user'    => get_current_user_id(),
+					'listing' => $listing->get_id(),
 				]
 			);
 
 			if ( ! $favorite->save() ) {
-				return hp\rest_error( 400 );
+				return hp\rest_error( 400, $favorite->_get_errors() );
 			}
 		}
 
-		return new \WP_Rest_Response(
+		return hp\rest_response(
+			200,
 			[
-				'data' => [
-					'id' => $listing->get_id(),
-				],
-			],
-			200
+				'id' => $listing->get_id(),
+			]
 		);
 	}
 
 	/**
-	 * Redirects listings page.
+	 * Redirects listings favorite page.
 	 *
 	 * @return mixed
 	 */
-	public function redirect_listings_page() {
+	public function redirect_listings_favorite_page() {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return add_query_arg( 'redirect', rawurlencode( hp\get_current_url() ), User::get_url( 'login_user' ) );
+			return hivepress()->router->get_url(
+				'user_login_page',
+				[
+					'redirect' => hivepress()->router->get_current_url(),
+				]
+			);
 		}
 
 		// Check listings.
-		if ( hp\get_post_id(
+		if ( ! Models\Listing::query()->filter(
 			[
-				'post_type'   => 'hp_listing',
-				'post_status' => 'publish',
-				'post__in'    => array_merge(
-					[ 0 ],
-					hivepress()->favorite->get_listing_ids( get_current_user_id() )
-				),
+				'status' => 'publish',
+				'id__in' => hivepress()->request->get_context( 'favorite_ids', [] ),
 			]
-		) === 0 ) {
-			return true;
+		)->get_first_id() ) {
+			return hivepress()->router->get_url( 'user_account_page' );
 		}
+
+		return false;
 	}
 
 	/**
-	 * Renders listings page.
+	 * Renders listings favorite page.
 	 *
 	 * @return string
 	 */
-	public function render_listings_page() {
+	public function render_listings_favorite_page() {
 
 		// Query listings.
 		query_posts(
-			[
-				'post_type'      => 'hp_listing',
-				'post_status'    => 'publish',
-				'post__in'       => hivepress()->favorite->get_listing_ids( get_current_user_id() ),
-				'orderby'        => 'post__in',
-				'posts_per_page' => -1,
-			]
+			Models\Listing::query()->filter(
+				[
+					'status' => 'publish',
+					'id__in' => hivepress()->request->get_context( 'favorite_ids', [] ),
+				]
+			)->order( 'id__in' )
+			->get_args()
 		);
 
-		return ( new Blocks\Template( [ 'template' => 'listings_favorite_page' ] ) )->render();
+		// Render template.
+		return ( new Blocks\Template(
+			[
+				'template' => 'listings_favorite_page',
+
+				'context'  => [
+					'listings' => [],
+				],
+			]
+		) )->render();
 	}
 }
