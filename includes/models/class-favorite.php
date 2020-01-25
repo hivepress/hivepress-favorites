@@ -28,7 +28,13 @@ class Favorite extends Comment {
 		$args = hp\merge_arrays(
 			[
 				'fields' => [
-					'user'    => [
+					'added_date' => [
+						'type'   => 'date',
+						'format' => 'Y-m-d H:i:s',
+						'_alias' => 'comment_date',
+					],
+
+					'user'       => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'required'  => true,
@@ -36,7 +42,7 @@ class Favorite extends Comment {
 						'_model'    => 'user',
 					],
 
-					'listing' => [
+					'listing'    => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'required'  => true,

@@ -74,7 +74,7 @@ final class Favorite extends Component {
 			[
 				'user' => get_current_user_id(),
 			]
-		);
+		)->order( [ 'added_date' => 'desc' ] );
 
 		// Get cached IDs.
 		$favorite_ids = hivepress()->cache->get_user_cache( get_current_user_id(), array_merge( $query->get_args(), [ 'fields' => 'listing_ids' ] ), 'models/favorite' );
