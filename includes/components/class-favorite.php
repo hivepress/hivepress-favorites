@@ -161,7 +161,7 @@ final class Favorite extends Component {
 			$template,
 			[
 				'blocks' => [
-					'listing_actions_primary' => [
+					'listing_actions_secondary' => [
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
