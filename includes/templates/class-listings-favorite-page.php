@@ -30,10 +30,16 @@ class Listings_Favorite_Page extends User_Account_Page {
 				'blocks' => [
 					'page_content' => [
 						'blocks' => [
-							'listings' => [
+							'listings'           => [
 								'type'    => 'listings',
 								'columns' => 2,
 								'_order'  => 10,
+							],
+
+							'listing_pagination' => [
+								'type'   => 'part',
+								'path'   => 'page/pagination',
+								'_order' => 20,
 							],
 						],
 					],
