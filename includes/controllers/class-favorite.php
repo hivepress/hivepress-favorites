@@ -39,11 +39,12 @@ final class Favorite extends Controller {
 					],
 
 					'listings_favorite_page'  => [
-						'title'    => esc_html__( 'Favorites', 'hivepress-favorites' ),
-						'base'     => 'user_account_page',
-						'path'     => '/favorites',
-						'redirect' => [ $this, 'redirect_listings_favorite_page' ],
-						'action'   => [ $this, 'render_listings_favorite_page' ],
+						'title'     => esc_html__( 'Favorites', 'hivepress-favorites' ),
+						'base'      => 'user_account_page',
+						'path'      => '/favorites',
+						'redirect'  => [ $this, 'redirect_listings_favorite_page' ],
+						'action'    => [ $this, 'render_listings_favorite_page' ],
+						'paginated' => true,
 					],
 				],
 			],
@@ -152,7 +153,10 @@ final class Favorite extends Controller {
 					'status' => 'publish',
 					'id__in' => hivepress()->request->get_context( 'favorite_ids', [] ),
 				]
-			)->order( 'id__in' )
+			)
+			->order( 'id__in' )
+			->limit( get_option( 'hp_listings_per_page' ) )
+			->paginate( hivepress()->request->get_page_number() )
 			->get_args()
 		);
 
