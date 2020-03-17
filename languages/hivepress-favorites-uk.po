@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: HivePress Favorites\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-21 12:39+0000\n"
-"PO-Revision-Date: 2020-03-09 18:52+0000\n"
-"Last-Translator: admin <admin@hivepress.local>\n"
-"Language-Team: Українська\n"
+"PO-Revision-Date: 2020-03-17 15:41+0000\n"
+"Last-Translator: admin <admin@admin.com>\n"
+"Language-Team: Ukrainian\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
 "n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
@@ -18,26 +18,25 @@ msgstr ""
 #: includes/blocks/class-favorite-toggle.php:41
 msgid "Add to Favorites"
 msgstr ""
-"Додати в обране\n"
+"Додати до обраних\n"
 
 #: includes/blocks/class-favorite-toggle.php:42
 msgid "Remove from Favorites"
-msgstr "Зняти позначку вибраного"
+msgstr "Видалити з обраних"
 
 #: includes/controllers/class-favorite.php:61
 msgid "Favorites"
-msgstr ""
-"Вибране\n"
+msgstr "Обрані"
 
 #. Name of the plugin
 msgid "HivePress Favorites"
 msgstr ""
-"HivePress Вибране\n"
+"HivePress Обрані\n"
 
 #. Description of the plugin
 msgid "Allow users to keep a list of favorite listings."
 msgstr ""
-"Дайте користувачам можливість додавати оголошення в обране.\n"
+"Дайте користувачам можливість вести список обраних оголошень.\n"
 
 #. Author of the plugin
 msgid "HivePress"
