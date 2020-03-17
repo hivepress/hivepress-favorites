@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Favorites
  * Description: Allow users to keep a list of favorite listings.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-favorites
