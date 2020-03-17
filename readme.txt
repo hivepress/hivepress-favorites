@@ -15,3 +15,7 @@ Allow users to keep a list of favorite listings.
 HivePress Favorites is an extension for [HivePress](https://wordpress.org/plugins/hivepress/) plugin. It allows users to keep a list of favorite listings.
 
 [Demo](https://demo.hivepress.io/) | [Docs](https://hivepress.io/docs/extensions/favorites/) | [Support](https://hivepress.io/support/forum/extensions/favorites/)
+
+== Changelog ==
+
+[View changelog on GitHub.](https://github.com/hivepress/hivepress-favorites/releases)
