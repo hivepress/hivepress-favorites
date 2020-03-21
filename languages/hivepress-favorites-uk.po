@@ -18,7 +18,7 @@ msgstr ""
 #: includes/blocks/class-favorite-toggle.php:41
 msgid "Add to Favorites"
 msgstr ""
-"Додати до обраних\n"
+"Додати до обраних"
 
 #: includes/blocks/class-favorite-toggle.php:42
 msgid "Remove from Favorites"
@@ -31,19 +31,19 @@ msgstr "Обрані"
 #. Name of the plugin
 msgid "HivePress Favorites"
 msgstr ""
-"HivePress Обрані\n"
+"HivePress Обрані"
 
 #. Description of the plugin
 msgid "Allow users to keep a list of favorite listings."
 msgstr ""
-"Дайте користувачам можливість вести список обраних оголошень.\n"
+"Дайте користувачам можливість вести список обраних оголошень."
 
 #. Author of the plugin
 msgid "HivePress"
 msgstr ""
-"HivePress\n"
+"HivePress"
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"
 msgstr ""
-"https://hivepress.io/\n"
+"https://hivepress.io/"
