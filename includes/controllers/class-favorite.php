@@ -118,12 +118,7 @@ final class Favorite extends Controller {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return hivepress()->router->get_url(
-				'user_login_page',
-				[
-					'redirect' => hivepress()->router->get_current_url(),
-				]
-			);
+			return hivepress()->router->get_return_url( 'user_login_page' );
 		}
 
 		// Check listings.
@@ -147,7 +142,8 @@ final class Favorite extends Controller {
 	public function render_listings_favorite_page() {
 
 		// Query listings.
-		query_posts(
+		hivepress()->request->set_context(
+			'post_query',
 			Models\Listing::query()->filter(
 				[
 					'status' => 'publish',
