@@ -35,19 +35,17 @@ class Favorite extends Comment {
 					],
 
 					'user'       => [
-						'type'      => 'number',
-						'min_value' => 1,
-						'required'  => true,
-						'_alias'    => 'user_id',
-						'_model'    => 'user',
+						'type'     => 'id',
+						'required' => true,
+						'_alias'   => 'user_id',
+						'_model'   => 'user',
 					],
 
 					'listing'    => [
-						'type'      => 'number',
-						'min_value' => 1,
-						'required'  => true,
-						'_alias'    => 'comment_post_ID',
-						'_model'    => 'listing',
+						'type'     => 'id',
+						'required' => true,
+						'_alias'   => 'comment_post_ID',
+						'_model'   => 'listing',
 					],
 				],
 			],
