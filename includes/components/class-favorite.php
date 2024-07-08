@@ -151,10 +151,6 @@ final class Favorite extends Component {
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
 								'view'       => $view,
-								'captions'   => [
-									esc_html__( 'Add to Favorite', 'hivepress-favorites' ),
-									esc_html__( 'Remove from Favorites', 'hivepress-favorites' ),
-								],
 								'_order'     => 20,
 
 								'attributes' => [
@@ -204,25 +200,35 @@ final class Favorite extends Component {
 	 */
 	public function alter_favorite_toggle_block( $args ) {
 		if ( ! get_option( 'hp_listing_count_favorite' ) ) {
-			return $args;
-		}
 
-		// Get view mode.
-		$view = hp\get_array_value( $args, 'view' );
-
-		// Get listing.
-		$listing = hp\get_array_value( hp\get_array_value( $args, 'context', [] ), 'listing' );
-
-		// Get listing favorite count.
-		$favorite_count = $listing->get_favorite_count() ? $listing->get_favorite_count() : 0;
-
-		if ( 'icon_link' === $view ) {
-			$args['captions'] = [ ' ' . $favorite_count ];
-		} else {
+			// Add caption.
 			$args['captions'] = [
-				hp\get_first_array_value( $args['captions'] ) . ' (' . $favorite_count . ')',
-				hp\get_last_array_value( $args['captions'] ) . ' (' . $favorite_count . ')',
+				esc_html__( 'Add to Favorite', 'hivepress-favorites' ),
+				esc_html__( 'Remove from Favorites', 'hivepress-favorites' ),
 			];
+		} else {
+
+			// Get view mode.
+			$view = hp\get_array_value( $args, 'view' );
+
+			// Get listing.
+			$listing = hp\get_array_value( hp\get_array_value( $args, 'context', [] ), 'listing' );
+
+			// Get listing favorite count.
+			$favorite_count = absint( $listing->get_favorite_count() );
+
+			if ( 'icon_link' === $view ) {
+
+				// Add caption.
+				$args['captions'] = [ ' ' . $favorite_count ];
+			} else {
+
+				// Add caption.
+				$args['captions'] = [
+					sprintf( esc_html__( 'Add to Favorite %s', 'hivepress-favorites' ), ' (' . $favorite_count . ')' ),
+					sprintf( esc_html__( 'Remove from Favorites %s', 'hivepress-favorites' ), ' (' . $favorite_count . ')' ),
+				];
+			}
 		}
 
 		return $args;
