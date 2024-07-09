@@ -139,7 +139,7 @@ final class Favorite extends Component {
 		$view = 'icon';
 
 		if ( get_option( 'hp_listing_count_favorite' ) ) {
-			$view = 'icon_link';
+			$view = 'link';
 		}
 
 		return hp\merge_trees(
@@ -217,7 +217,7 @@ final class Favorite extends Component {
 			// Get listing favorite count.
 			$favorite_count = absint( $listing->get_favorite_count() );
 
-			if ( 'icon_link' === $view ) {
+			if ( 'link' === $view ) {
 
 				// Add caption.
 				$args['captions'] = [ ' ' . $favorite_count ];
@@ -225,8 +225,8 @@ final class Favorite extends Component {
 
 				// Add caption.
 				$args['captions'] = [
-					sprintf( esc_html__( 'Add to Favorite %s', 'hivepress-favorites' ), ' (' . $favorite_count . ')' ),
-					sprintf( esc_html__( 'Remove from Favorites %s', 'hivepress-favorites' ), ' (' . $favorite_count . ')' ),
+					esc_html__( 'Add to Favorite', 'hivepress-favorites' ) . ' (' . $favorite_count . ')',
+					esc_html__( 'Remove from Favorites', 'hivepress-favorites' ) . ' (' . $favorite_count . ')',
 				];
 			}
 		}
