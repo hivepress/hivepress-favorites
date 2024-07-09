@@ -86,6 +86,12 @@ final class Favorite extends Controller {
 
 			// Delete favorites.
 			$favorites->delete();
+
+			if ( get_option( 'hp_listing_count_favorite' ) && $listing->get_favorite_count() ) {
+
+				// Decrease favorite count.
+				$listing->set_favorite_count( absint( $listing->get_favorite_count() ) - 1 )->save_favorite_count();
+			}
 		} else {
 
 			// Add favorite.
@@ -98,6 +104,12 @@ final class Favorite extends Controller {
 
 			if ( ! $favorite->save() ) {
 				return hp\rest_error( 400, $favorite->_get_errors() );
+			}
+
+			if ( get_option( 'hp_listing_count_favorite' ) ) {
+
+				// Increase favorite count.
+				$listing->set_favorite_count( absint( $listing->get_favorite_count() ) + 1 )->save_favorite_count();
 			}
 		}
 
