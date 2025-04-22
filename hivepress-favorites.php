@@ -18,6 +18,8 @@ defined( 'ABSPATH' ) || exit;
 add_filter(
 	'hivepress/v1/extensions',
 	function( $extensions ) {
-		return array_merge( $extensions, [ __DIR__ ] );
+		$extensions[] = __DIR__;
+
+		return $extensions;
 	}
 );

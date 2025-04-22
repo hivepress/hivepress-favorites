@@ -2,7 +2,7 @@
 Contributors: hivepress
 Tags: hivepress, favorites, directory, listings, classifieds
 Requires at least: 5.0
-Tested up to: 6.1
+Tested up to: 6.6
 Requires PHP: 7.0
 Stable tag: 1.2.2
 License: GPLv3
@@ -14,7 +14,7 @@ Allow users to keep a list of favorite listings.
 
 HivePress Favorites is an extension for [HivePress](https://wordpress.org/plugins/hivepress/) plugin. It allows users to keep a list of favorite listings.
 
-[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/category/37-favorites) | [Support](https://community.hivepress.io/?utm_medium=referral&utm_source=wordpress.org)
+[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/) | [Support](https://community.hivepress.io/)
 
 == Changelog ==
 
