@@ -43,6 +43,12 @@ final class Favorite extends Component {
 			add_filter( 'hivepress/v1/templates/listing_view_page', [ $this, 'alter_listing_view_page' ] );
 		}
 
+		// Alter favorite toggle block.
+		add_filter( 'hivepress/v1/blocks/favorite_toggle', [ $this, 'alter_favorite_toggle_block' ] );
+
+		// Add listing model fields.
+		add_filter( 'hivepress/v1/models/listing', [ $this, 'add_listing_fields' ] );
+
 		parent::__construct( $args );
 	}
 
@@ -128,6 +134,14 @@ final class Favorite extends Component {
 	 * @return array
 	 */
 	public function alter_listing_view_block( $template ) {
+
+		// Get view mode.
+		$view = 'icon';
+
+		if ( get_option( 'hp_listing_count_favorite' ) ) {
+			$view = 'link';
+		}
+
 		return hp\merge_trees(
 			$template,
 			[
@@ -136,7 +150,7 @@ final class Favorite extends Component {
 						'blocks' => [
 							'listing_favorite_toggle' => [
 								'type'       => 'favorite_toggle',
-								'view'       => 'icon',
+								'view'       => $view,
 								'_order'     => 20,
 
 								'attributes' => [
@@ -176,5 +190,65 @@ final class Favorite extends Component {
 				],
 			]
 		);
+	}
+
+	/**
+	 * Alter favorite toggle block.
+	 *
+	 * @param array $args Block arguments.
+	 * @return array
+	 */
+	public function alter_favorite_toggle_block( $args ) {
+		if ( ! get_option( 'hp_listing_count_favorite' ) ) {
+
+			// Add caption.
+			$args['captions'] = [
+				esc_html__( 'Add to Favorite', 'hivepress-favorites' ),
+				esc_html__( 'Remove from Favorites', 'hivepress-favorites' ),
+			];
+		} else {
+
+			// Get view mode.
+			$view = hp\get_array_value( $args, 'view' );
+
+			// Get listing.
+			$listing = hp\get_array_value( hp\get_array_value( $args, 'context', [] ), 'listing' );
+
+			// Get listing favorite count.
+			$favorite_count = absint( $listing->get_favorite_count() );
+
+			if ( 'link' === $view ) {
+
+				// Add caption.
+				$args['captions'] = [ ' ' . $favorite_count ];
+			} else {
+
+				// Add caption.
+				$args['captions'] = [
+					esc_html__( 'Add to Favorite', 'hivepress-favorites' ) . ' (' . $favorite_count . ')',
+					esc_html__( 'Remove from Favorites', 'hivepress-favorites' ) . ' (' . $favorite_count . ')',
+				];
+			}
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Add model fields.
+	 *
+	 * @param array $model Model arguments.
+	 * @return array
+	 */
+	public function add_listing_fields( $model ) {
+		if ( get_option( 'hp_listing_count_favorite' ) ) {
+			$model['fields']['favorite_count'] = [
+				'type'      => 'number',
+				'min_value' => 0,
+				'_external' => true,
+			];
+		}
+
+		return $model;
 	}
 }
